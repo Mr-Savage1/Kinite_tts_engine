@@ -1,5 +1,5 @@
 
-# 🎙️ kinite TTS Engine
+# 🎙️ Kinite TTS Engine
 
 <div align="center">
   <img src="assets/icon.png" alt="kinite TTS Logo" width="120" height="120"/>
