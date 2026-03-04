@@ -37,7 +37,7 @@
 |---------|-------------|--------|
 | **Pipeline** | Streaming synthesis with zero-copy | ✅ Active |
 | **Hardware** | NEON/AVX, GPU, DSP acceleration | ✅ Active |
-| **Latency** | <10ms first-chunk response | ✅ Active |
+| **Latency** | <100ms first-chunk response | ✅ Active |
 | **Queue** | Priority-based dynamic buffer | ✅ Active |
 | **Isolate** | Parallel Dart isolates | ✅ Active |
 | **Power** | Dynamic frequency scaling | ✅ Active |
