@@ -2,7 +2,7 @@
 # 🎙️ Kinite TTS Engine
 
 <div align="center">
-  <img src="assets/Ico.png" alt="kinite TTS Logo" width="120" height="120"/>
+  <img src="assets/Ico.png" alt="kinite TTS Logo" width="400" height="200"/>
   <h3>Next-Generation Text-to-Speech with Hardware Acceleration</h3>
   <p>Professional-grade TTS with multiple engine support and real-time optimizations</p>
 </div>
