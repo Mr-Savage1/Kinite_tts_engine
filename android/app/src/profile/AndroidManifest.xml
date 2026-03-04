@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kinite.engine">
+
+    <!-- INTERNET permission required for profile mode -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+</manifest>

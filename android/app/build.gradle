@@ -1,0 +1,96 @@
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+// Add keystore properties loading at the top
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+android {
+    namespace = "com.kinite.engine"
+    // SDK 36 is required by recent path_provider updates in 2026
+    compileSdk = 36
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    sourceSets {
+        main {
+            // Essential for Sherpa-ONNX to find native libraries in the APK
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    defaultConfig {
+        applicationId = "com.kinite.engine"
+        // MinSDK 24 is the baseline for high-performance ONNX
+        minSdk = 24
+        targetSdk = 35
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    // Add signing configuration for release builds
+    signingConfigs {
+        release {
+            keyAlias = keystoreProperties['keyAlias']
+            keyPassword = keystoreProperties['keyPassword']
+            storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword = keystoreProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        release {
+            // Use the release signing config instead of debug
+            signingConfig = signingConfigs.release
+            // Keep these false during your initial testing to avoid R8 stripping native code
+            minifyEnabled = false
+            shrinkResources = false
+
+            // Add ProGuard rules to keep ONNX Runtime classes
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig = signingConfigs.debug
+        }
+    }
+
+    packagingOptions {
+        // PREVENT COMPRESSION: This allows the 312MB model to be
+        // memory-mapped, which fixes the "Davey" lag and init errors.
+        jniLibs {
+            useLegacyPackaging = true
+        }
+
+        // Pick the first instance if duplicates occur between plugins
+        pickFirst '**/libsherpa-onnx-c-api.so'
+        pickFirst '**/libonnxruntime.so'
+        pickFirst '**/libc++_shared.so'
+
+        // Ensure libraries for Moto G34 (arm64) are not stripped or compressed
+        doNotStrip "*/arm64-v8a/*.so"
+        doNotStrip "*/armeabi-v7a/*.so"
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    // No extra native dependencies needed; the flutter plugin handles them
+}
